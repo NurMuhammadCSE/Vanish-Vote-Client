@@ -73,12 +73,12 @@ const CommentSection = ({ pollId }: { pollId: string }) => {
             <form onSubmit={handleSubmit} className="mt-4 flex items-center space-x-2">
                 <textarea
                     className="w-full p-2 border rounded-md"
-                    rows={3}
+                    rows={2}
                     placeholder="Write a comment..."
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
                 />
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">
+                <button type="submit" className="bg-blue-500 cursor-pointer text-white p-2 rounded-md">
                     Post Comment
                 </button>
             </form>
