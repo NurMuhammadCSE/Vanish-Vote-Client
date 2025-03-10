@@ -1,5 +1,5 @@
 export default {
-    darkMode: 'class', // You can use 'media' or 'class'
+    darkMode: 'class', // This enables dark mode based on the 'dark' class on the <body> tag
     theme: {
       extend: {
         colors: {

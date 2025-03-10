@@ -1,10 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import DarkModeToggle from '../components/DarkMode';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-r 
+ 
+    flex items-center justify-center">
       <div className="bg-white p-10 rounded-2xl shadow-xl text-center max-w-md">
+        {/* Dark Mode Toggle */}
+        <div className="absolute top-4 right-4">
+          <DarkModeToggle />
+        </div>
+
         <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
           Welcome to <span className="text-blue-500">VanishVote</span>
         </h1>

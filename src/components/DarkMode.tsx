@@ -1,23 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DarkModeToggle = () => {
     const [darkMode, setDarkMode] = useState(false);
 
-    const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
-        if (darkMode) {
-            document.documentElement.classList.remove('dark');
+    // On component mount, read from localStorage or use system default
+    useEffect(() => {
+        const storedMode = localStorage.getItem('theme');
+        if (storedMode) {
+            setDarkMode(storedMode === 'dark');
         } else {
-            document.documentElement.classList.add('dark');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setDarkMode(systemPrefersDark);
         }
-    };
+    }, []);
+
+    // Apply the dark mode class to <html> tag whenever darkMode changes
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [darkMode]);
+
+    // Toggle the darkMode state
+    const toggleDarkMode = () => setDarkMode(!darkMode);
 
     return (
         <button
             onClick={toggleDarkMode}
-            className="bg-blue-500 text-white p-2 rounded-md"
+            className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all"
         >
-            {darkMode ? '🌞 Light Mode' : '🌙 Dark Mode'}
+            {darkMode ? '🌙' : '🌞'}
         </button>
     );
 };

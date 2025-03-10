@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CreatePoll from './pages/CreatePoll';
 import PollDetails from './components/PollDetails';
+import '../src/index.css'
 
 function App() {
   return (
