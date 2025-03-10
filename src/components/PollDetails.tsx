@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactionButtons from './ReactionButton';
 import CommentSection from './CommentSection';
+import Swal from 'sweetalert2';
 
 const PollDetails = () => {
     const { id } = useParams<{ id: string }>();
+
     interface PollOption {
         text: string;
         votes: number;
@@ -23,33 +25,44 @@ const PollDetails = () => {
     const [resultsHidden, setResultsHidden] = useState(true);
 
     useEffect(() => {
-        // Fetch poll data from the server
         const fetchPoll = async () => {
-            const response = await fetch(`http://localhost:5000/api/polls/${id}`);
-            const data = await response.json();
-            setPoll(data);
+            try {
+                const response = await fetch(`https://vanish-vote-server.vercel.app/api/polls/${id}`);
+                const data = await response.json();
+                setPoll(data);
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to fetch poll data!',
+                });
+            }
         };
 
         fetchPoll();
     }, [id]);
 
-    // const handleVote = () => {
-    //     if (!selectedOption) return alert('Please select an option to vote!');
-
-    //     setHasVoted(true);
-    //     alert(`You voted for: ${selectedOption}`);
-
-    //     // Here, you would typically send the vote to the server to update the poll data.
-    // };
-
     const handleVote = () => {
-        if (!selectedOption) return alert('Please select an option to vote!');
+        if (!selectedOption) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Please select an option before voting!',
+            });
+            return;
+        }
+
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `You voted for: ${selectedOption}`,
+            showConfirmButton: false,
+            timer: 1500
+        });
 
         setHasVoted(true);
-        alert(`You voted for: ${selectedOption}`);
 
-        // Send the vote to the backend
-        fetch(`http://localhost:5000/api/polls/${id}/vote`, {
+        fetch(`https://vanish-vote-server.vercel.app/api/polls/${id}/vote`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,14 +72,27 @@ const PollDetails = () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log("Vote successful!");
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Vote Successful!',
+                    //     text: `Your vote for "${selectedOption}" has been recorded.`,
+                    // });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to submit your vote. Please try again.',
+                    });
                 }
             })
-            .catch(error => {
-                console.error("Error voting:", error);
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again later.',
+                });
             });
     };
-
 
     const toggleResults = () => {
         setResultsHidden(!resultsHidden);
@@ -84,8 +110,8 @@ const PollDetails = () => {
                     {poll.options.map((option, idx) => (
                         <label
                             key={idx}
-                            className={`block p-3 border rounded-lg cursor-pointer ${selectedOption === option.text ? 'bg-blue-500 text-white' : 'bg-gray-100'
-                                }`}
+                            className={`block p-3 border rounded-lg cursor-pointer 
+                            ${selectedOption === option.text ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
                         >
                             <input
                                 type="radio"
@@ -114,7 +140,9 @@ const PollDetails = () => {
                 {hasVoted && (
                     <div className="mt-6 text-center">
                         {poll.resultsHidden && resultsHidden ? (
-                            <p className="text-gray-500 italic">Results are hidden until the poll ends.</p>
+                            <p className="text-gray-500 italic">
+                                Results are hidden until the poll ends.
+                            </p>
                         ) : (
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Results</h2>
@@ -125,6 +153,7 @@ const PollDetails = () => {
                                 ))}
                             </div>
                         )}
+
                         {/* Button to toggle results visibility */}
                         <button
                             onClick={toggleResults}
@@ -138,7 +167,6 @@ const PollDetails = () => {
                 {/* Reaction Buttons */}
                 <ReactionButtons />
                 <CommentSection pollId={id ?? ''} />
-
             </div>
         </div>
     );

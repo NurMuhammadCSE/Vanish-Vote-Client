@@ -28,7 +28,7 @@ const CreatePoll = () => {
         const expiryDate = calculateExpiryDate(expiry);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/polls/create', {
+            const response = await axios.post('https://vanish-vote-server.vercel.app/api/polls/create', {
                 question,
                 options,
                 expiresIn: expiry,
