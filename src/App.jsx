@@ -1,17 +1,15 @@
-import React from "react";
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import CreatePoll from './pages/CreatePoll';
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <h1>At Last React Set Up Done</h1>
-      <h1
-        class="text-3xl text-orange-700
- font-bold underline"
-      >
-        Hello world!
-      </h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/create" element={<CreatePoll />} />
+      {/* <Route path="/poll/:id" element={<PollDetails />} /> */}
+    </Routes>
   );
-};
+}
 
 export default App;
