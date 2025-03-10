@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactionButtons from './ReactionButton';
+import CommentSection from './CommentSection';
 
 const PollDetails = () => {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     interface PollOption {
         text: string;
         votes: number;
@@ -34,7 +35,7 @@ const PollDetails = () => {
 
     // const handleVote = () => {
     //     if (!selectedOption) return alert('Please select an option to vote!');
-        
+
     //     setHasVoted(true);
     //     alert(`You voted for: ${selectedOption}`);
 
@@ -43,10 +44,10 @@ const PollDetails = () => {
 
     const handleVote = () => {
         if (!selectedOption) return alert('Please select an option to vote!');
-        
+
         setHasVoted(true);
         alert(`You voted for: ${selectedOption}`);
-    
+
         // Send the vote to the backend
         fetch(`http://localhost:5000/api/polls/${id}/vote`, {
             method: 'POST',
@@ -55,17 +56,17 @@ const PollDetails = () => {
             },
             body: JSON.stringify({ selectedOption })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log("Vote successful!");
-            }
-        })
-        .catch(error => {
-            console.error("Error voting:", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Vote successful!");
+                }
+            })
+            .catch(error => {
+                console.error("Error voting:", error);
+            });
     };
-    
+
 
     const toggleResults = () => {
         setResultsHidden(!resultsHidden);
@@ -83,9 +84,8 @@ const PollDetails = () => {
                     {poll.options.map((option, idx) => (
                         <label
                             key={idx}
-                            className={`block p-3 border rounded-lg cursor-pointer ${
-                                selectedOption === option.text ? 'bg-blue-500 text-white' : 'bg-gray-100'
-                            }`}
+                            className={`block p-3 border rounded-lg cursor-pointer ${selectedOption === option.text ? 'bg-blue-500 text-white' : 'bg-gray-100'
+                                }`}
                         >
                             <input
                                 type="radio"
@@ -137,6 +137,8 @@ const PollDetails = () => {
 
                 {/* Reaction Buttons */}
                 <ReactionButtons />
+                <CommentSection pollId={id ?? ''} />
+
             </div>
         </div>
     );
