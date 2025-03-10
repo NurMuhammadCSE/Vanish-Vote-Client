@@ -1,16 +1,46 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Make sure to install axios for making HTTP requests
 
 const CreatePoll = () => {
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState(['']);
     const [expiry, setExpiry] = useState('1h');
+    const [pollLink, setPollLink] = useState('');
 
     const addOption = () => setOptions([...options, '']);
 
-    const handleSubmit = (e) => {
+    // Calculate expiration date based on selected expiry time
+    const calculateExpiryDate = (expiryTime) => {
+        const now = new Date();
+        if (expiryTime === '1h') {
+            now.setHours(now.getHours() + 1);
+        } else if (expiryTime === '12h') {
+            now.setHours(now.getHours() + 12);
+        } else if (expiryTime === '24h') {
+            now.setHours(now.getHours() + 24);
+        }
+        return now;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Logic to handle poll creation goes here
-        console.log({ question, options, expiry });
+
+        const expiryDate = calculateExpiryDate(expiry);
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/polls/create', {
+                question,
+                options,
+                expiresIn: expiry,
+                expiresAt: expiryDate,
+                resultsHidden: true, // Default value: hide results
+            });
+
+            // On successful poll creation, show the poll link
+            setPollLink(`${window.location.origin}/poll/${response.data._id}`);
+        } catch (error) {
+            console.error('Error creating poll:', error);
+        }
     };
 
     return (
@@ -74,6 +104,22 @@ const CreatePoll = () => {
                         🚀 Create Poll
                     </button>
                 </form>
+
+                {/* Display the Poll Link if created */}
+                {pollLink && (
+                    <div className="mt-6 text-center">
+                        <h3 className="text-lg font-semibold text-green-600">Poll Created Successfully!</h3>
+                        <p className="mt-2 text-sm text-gray-600">Share this link with others to participate:</p>
+                        <a
+                            href={pollLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline mt-2 block"
+                        >
+                            {pollLink}
+                        </a>
+                    </div>
+                )}
             </div>
         </div>
     );
