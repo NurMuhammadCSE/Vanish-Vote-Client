@@ -28,7 +28,7 @@ export default function Home() {
         {/* Button */}
         <Link
           to="/create"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full shadow-xl transform transition duration-300 hover:scale-105"
+          className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full shadow-xl transform transition duration-300 hover:scale-105"
         >
           Create a New Poll
         </Link>

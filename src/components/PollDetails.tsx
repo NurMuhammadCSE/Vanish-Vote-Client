@@ -130,7 +130,7 @@ const PollDetails = () => {
                 {!hasVoted && (
                     <button
                         onClick={handleVote}
-                        className="w-full bg-green-500 text-white py-3 rounded-lg mt-4 hover:bg-green-600 transition-all"
+                        className="w- cursor-pointer bg-green-500 text-white py-3 rounded-lg mt-4 hover:bg-green-600 transition-all"
                     >
                         🗳️ Submit Vote
                     </button>

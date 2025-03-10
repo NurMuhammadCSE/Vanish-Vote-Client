@@ -31,7 +31,7 @@ const DarkModeToggle = () => {
     return (
         <button
             onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all"
+            className="p-2 cursor-pointer rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all"
         >
             {darkMode ? '🌙' : '🌞'}
         </button>

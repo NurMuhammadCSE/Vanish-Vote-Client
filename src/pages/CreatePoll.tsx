@@ -80,7 +80,7 @@ const CreatePoll = () => {
                     <button
                         type="button"
                         onClick={addOption}
-                        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all"
+                        className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all"
                     >
                         ➕ Add Option
                     </button>
@@ -99,7 +99,7 @@ const CreatePoll = () => {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all"
+                        className="w-full cursor-pointer bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all"
                     >
                         🚀 Create Poll
                     </button>
